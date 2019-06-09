@@ -24,7 +24,7 @@ router.get('/', (req, res)=>{
     
     let sql = "SELECT b.*, u.name FROM boards AS b, users AS u "
             + " WHERE u.email = b.writer " 
-            + " ORDER BY b.id DESC LIMIT ?, 5";
+            + " ORDER BY b.id DESC LIMIT ?, 10";
     
     conn.query(sql, [ (page - 1 )* 10 ], (err, result)=>{
         if(err) {
@@ -36,6 +36,7 @@ router.get('/', (req, res)=>{
         let list = result;
         conn.query("SELECT count(*) AS cnt FROM boards", [], (err, result)=>{
             let p = {};
+    
             p.totalCnt = result[0].cnt; //전체 글의 갯수
             p.totalPage = Math.ceil(p.totalCnt / 10);
             p.endPage = Math.ceil(page / 5) * 5;
